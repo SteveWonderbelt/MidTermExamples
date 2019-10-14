@@ -19,3 +19,20 @@ dfs(Start,End,G,[E|Rest]):-member(E,G),[Start,Next]=E,dfs(Next,End,G,Rest).
 % we may be able to find an indirect one. Then pass that intermediate
 % node Next, the ending node, the graph, and the rest of the list minus
 % that intermediate connection into the base case.
+
+dfs2(Start,End,G,Path,0):-E=[Start,End],member(E,G),Path = [E].
+dfs2(Start,End,G,[E|Rest],N):- N>0,Nm1 is N-1,member(E,G),[Start,Next]=E,dfs2(Next,End,G,Rest,Nm1).
+
+
+% Base case: Given a start and end of the dfs, the start connects to end
+% and therefore that connection is in the list of connections and is the
+% connection path. Just one connection so N=0.
+% In the next case we don't know if there are intermediate steps or not,
+% so we make sure N is greater than 0, set Nm1 to one less than that,
+% establish that the head of the path is in the list of connections, set
+% the start-end connection, and call the base case.
+
+plan(Start,End,G,Path,N):-dfs2(Start,End,G,Path,N).
+plan(Start,End,G,Path,N):-Np1 is N+1, plan(Start,End,G,Path,Np1).
+
+

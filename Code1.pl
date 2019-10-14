@@ -1,0 +1,97 @@
+%Basic comparisons
+strictlyIncreasing(A,B,C):- A<B, B<C.
+nonDecreasing(A,B,C):- A =<B,B =<C.
+
+%Y is 2, X is Y, \+X =:= Y.
+
+quotient_remainder(X,Y,Q,R) :- Q is div(X,Y),R is mod(X,Y).
+quotient_remainder2(X,Y,Q,R):-Q is X // Y, R is mod(X,Y).
+
+square(B,S):- S is B*B.
+
+square_root(S,SR):-SR is sqrt(S).
+
+euclidean_distance(AX,AY,BX,BY,D):- Xdiff is BX-AX, Ydiff is BY-AY, D is sqrt(Xdiff*Xdiff+Ydiff*Ydiff).
+
+factorial(0,1).
+factorial(N,F):-N>0, R is N-1, factorial(R,RF), F is RF*N.
+
+power(A,1,A).
+power(A,P,A2P):- Pm1 is P-1, power(A,Pm1, A2Pm1),A2P is A*A2Pm1.
+
+power2(A,1,A).
+power2(A,P,A2P):-power(A,P-1,A2Pm1),A2P is A*A2Pm1.
+
+
+loc(b1,0,2).
+loc(b2,0,3).
+loc(b3,1,0).
+loc(b4,1,0).
+loc(b5,1,2).
+loc(b6,1,3).
+loc(b7,2,3).
+
+block(B):-loc(B,_,_).
+
+on(Bt,Bb):-loc(Bt,X,BtY),loc(Bb,X,BbY),BbY =:= BtY+1.
+above(Bt,Bb):-loc(Bt,X,BtY),loc(Bb,X,BbY),BbY> BtY.
+below(Bb,Bt):-above(Bt,Bb).
+left(B1,Br):-loc(B1,B1X,_),loc(Br,BrX,_),B1X<BrX.
+right(Br,Bl):-left(Bl,Br).
+on_the_table(B):-loc(B,_,3).
+top_of_stack(B):-block(B),\+on(_,B).
+
+%Lists
+head_tail([H|T],H,T).
+
+length_list([],0).
+length_list([_|T],L):-length_list(T,LT),L is LT+1.
+
+sum_list([],0).
+sum_list([H|T],S):-sum_list(T,TSum),S is H+TSum.
+
+adjacent_equals([H,H|_]).
+adjacent_equals([_,H|T]):-adjacent_equals([H|T]).
+
+is_sorted([]).
+is_sorted([_]).
+is_sorted([A,B|T]):-A=<B, is_sorted([B|T]).
+
+elem(M,[M|_]).
+elem(M, [_|T]):-elem(M,T).
+
+concat([],B,B).
+concat([H|T],B,[H|TB]):-concat(T,B,TB).
+
+rev([],[]).
+rev([H|T],R):-rev(T,TR),append(TR,[H],R).
+
+rev2(L,R):-revAcc(L,R,[]).
+revAcc([],Acc,Acc).
+revAcc([H|T],R,Acc):-revAcc(T,R,[H|Acc]).
+
+subset([],[]).
+subset([H|R],[H|T]):-subset(R,T).
+subset([_|R],T):-subset(R,T).
+
+merge_sort([],[]).
+merge_sort([X],[X]).
+merge_sort(X,S):-split(X,L,R),merge_sort(L,LS),merge_sort(R,RS),merge_lists(LS,RS,S).
+
+take(0,_,[]).
+take(N,[_|T],S):-NM1 is N-1, drop(NM1,T,S).
+
+drop(0,T,T).
+drop(N,[_|T],S):-Nm1 is N-1, drop(Nm1,T,S).
+
+split(List,L,R):-length(List,Len), N is Len//2,split_N(N,List,L,R).
+split_N(0,R,[],R).
+split_N(N,[H|T],[H|S],R):-Nm1 is N-1,split_N(Nm1,T,S,R).
+
+
+merge_lists(L,[],L).
+merge_lists([],L,L).
+merge_lists([H|T],[G|S],[H|M]):-H=<G,merge_lists(T,[G|S],M).
+merge_lists([H|T],[G|S],[G|M]):-H>G, merge_lists([H|T],S,M).
+
+
