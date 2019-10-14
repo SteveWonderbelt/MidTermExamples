@@ -1,0 +1,11 @@
+graph(G):-G=[[a,b],[b,c],[a,c]].
+% This is a list of coordinates, which are lists too. A goes to B, b
+% goes to C,and a also goes to C.
+graph2(G):-G=[[a,b],[b,c],[a,c],[c,d],[d,a]].
+graph3(G):-G=[[a,b],[b,c],[a,c],[c,d],[d,a],[a,e],[e,f]].
+graph4(G):-G=[[a,b],[b,c],[a,c],[c,d],[d,a],[a,e],[e,f]].
+
+dfs(Start,End,G,Path):- E=[Start,End],member(E,G),Path = [E].
+dfs(Start,End,G,[E|Rest],N):-member(E,G),[Start,Next]=E,dfs(Next,End,G,Rest).
+
+%Base case is simple
