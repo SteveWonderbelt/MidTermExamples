@@ -42,3 +42,35 @@ smaller(d1,d2). smaller(d5,d6).
 smaller(d2,d3). smaller(d6,d7).
 smaller(d3,d4). smaller(d7,d8).
 smaller(d4,d5).
+
+%Establish which dolls are smaller than others.
+larger(X,Y):-smaller(Y,X).
+larger(X,Y):- smaller(Y,Z),larger(X,Z).
+
+% In the base case we know already if X is bigger than Y, its' when Y is
+% smaller than X. However, what if we don't know directly? Well then
+% establish some in-between doll Z that we can see if X is larger than.
+% If Y is smaller than Z and X is larger than Z then Y must be smaller
+% than X and X larger than y.
+%instance of inside() s
+inside(d4,d8).
+inside(d3,d7).
+inside(d2,d4).
+inside(d1,d3).
+
+contains(X,Y):-inside(Y,X).
+contains(X,Y):-inside(Y,Z),contains(X,Z).
+
+% Here again, if X contains Y but we don't know that directly we can
+% aksi if Y is inside some Z. IF X contains that Z then indirectly we
+% know that X does contain Y since it contains Z which Y is inside.
+color(red). color(green). color(blue).
+solution(C1, C2, C3, C4, C5, C6, C7, C8):-
+    color(C1),color(C2), \+C1=C2,
+    C1=C3,C3=C8,C8=C6,
+    C2=C4,C4=C5,C5=C7.
+
+%fIRST, red, blue and green are colors.
+% Given some variables, we know that the first two are certain colors,
+% but don't know which exactly just that they are different. We also
+% know that some elements are equal to some others, etc.
